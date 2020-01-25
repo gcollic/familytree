@@ -21,6 +21,8 @@ description:         Please see the README on GitHub at <https://github.com/gcol
 
 dependencies:
 - base >= 4.7 && < 5
+- text
+- megaparsec
 
 library:
   source-dirs: src
@@ -35,6 +37,8 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - familytree
+    - text
+    - megaparsec
 
 tests:
   familytree-test:
