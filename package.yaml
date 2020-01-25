@@ -26,6 +26,10 @@ dependencies:
 
 library:
   source-dirs: src
+  dependencies:
+    - text
+    - megaparsec
+    - containers
 
 executables:
   familytree-exe:
@@ -35,6 +39,7 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -fwarn-incomplete-patterns
     dependencies:
     - familytree
     - text
@@ -50,3 +55,7 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - familytree
+    - hspec
+    - QuickCheck
+    - hspec-megaparsec
+    - megaparsec
