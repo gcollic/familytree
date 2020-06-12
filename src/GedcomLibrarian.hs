@@ -12,7 +12,7 @@
 -- Looks for information in Gedcom data structure.
 -----------------------------------------------------------------------------
 module GedcomLibrarian
-    ( findIndi
+    ( findIndividual
     )
 where
 
@@ -21,13 +21,13 @@ import           Data.Text.Internal.Search      ( indices )
 import qualified Data.Text                     as T
 import           GedcomData
 
-findIndi :: Text -> [Entry] -> [Entry]
-findIndi t =
-    filter (\e -> entryTag e == "INDI" && any (isThisName t) (entryChildren e))
+findIndividual :: Text -> [Entry] -> [Entry]
+findIndividual t =
+    filter (\e -> entryTag e == "INDI" && any (isThatName t) (entryChildren e))
 
-isThisName :: Text -> Entry -> Bool
-isThisName text (Entry "NAME" (Just name) _) = text `isInside` name
-isThisName _    _                            = False
+isThatName :: Text -> Entry -> Bool
+isThatName text (Entry "NAME" (Just name) _) = text `isInside` name
+isThatName _    _                            = False
 
 isInside :: Text -> Text -> Bool
 isInside a b = not $ null $ indices (T.toLower a) (T.toLower b)

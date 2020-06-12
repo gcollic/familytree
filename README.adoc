@@ -1,0 +1,6 @@
+== Family tree
+
+[source,haskell]
+----
+include::app/Main.hs[tags=usage]
+----

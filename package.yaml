@@ -7,7 +7,7 @@ maintainer:          "gcollic@gmail.com"
 copyright:           "2020 Guillaume COLLIC"
 
 extra-source-files:
-- README.md
+- README.adoc
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package

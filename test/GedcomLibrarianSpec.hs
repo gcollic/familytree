@@ -15,15 +15,15 @@ import           GedcomData
 spec :: Spec
 spec = describe "Find indi" $ do
     it "returns an empty collection if nothing is found" $ do
-        findIndi "bob" simpsons `shouldBe` []
+        findIndividual "bob" simpsons `shouldBe` []
     it "returns matching INDI entries (the text is the name)" $ do
-        findIndi "Maggie /Simpson/" simpsons
+        findIndividual "Maggie /Simpson/" simpsons
             `shouldBe` [ Entry "INDI"
                                (Just "@Maggie_Simpson@")
                                [Entry "NAME" (Just "Maggie /Simpson/") []]
                        ]
     it "returns matching INDI entries (the text is a part of the name)" $ do
-        findIndi "Simpson" simpsons
+        findIndividual "Simpson" simpsons
             `shouldBe` [ Entry "INDI"
                                (Just "@Abraham_Simpson@")
                                [Entry "NAME" (Just "Abraham /Simpson/") []]
@@ -47,7 +47,7 @@ spec = describe "Find indi" $ do
                                [Entry "NAME" (Just "Mona /Simpson/") []]
                        ]
     it "ignores case" $ do
-        findIndi "Ma" simpsons
+        findIndividual "Ma" simpsons
             `shouldBe` [ Entry "INDI"
                                (Just "@Maggie_Simpson@")
                                [Entry "NAME" (Just "Maggie /Simpson/") []]
