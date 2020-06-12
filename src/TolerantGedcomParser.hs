@@ -43,9 +43,11 @@ parseGedcom f s = case parse gedcom f s of
 
 gedcom :: Parser [Item]
 gedcom = do
+    _         <- optional bom
     rootItems <- many rootItem
     _         <- eof
     return rootItems
+    where bom = char '\65279'
 
 rootItem :: Parser Item
 rootItem = try referenceLine <|> (genericLine 0)
@@ -88,5 +90,5 @@ longLine i = do
 
 parseTag :: Parser Text
 parseTag = do
-    t     <- many (upperChar <|> char '_')
+    t <- many (upperChar <|> char '_' <|> digitChar)
     return $ T.pack t

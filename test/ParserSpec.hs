@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+module ParserSpec (spec) where
+
 import           Test.Hspec
 import           Test.QuickCheck
 import           Control.Exception              ( evaluate )
@@ -16,8 +18,8 @@ type Parser = Parsec Void String
 p f = parse f "TEST"
 
 {- HLINT ignore main "Redundant do" -}
-main :: IO ()
-main = hspec $ do
+spec :: Spec
+spec = do
   describe "GedCom line" $ do
     it "parses line with only indent, tag, and space"
       $             p (genericLine 0) "0 HEAD \r\n"
@@ -31,20 +33,38 @@ main = hspec $ do
     it "parses line with level, tag, and multiple words"
       $             p (genericLine 2) "2 DATE 14 MAY 1716\r\n"
       `shouldParse` Item "DATE" (Just "14 MAY 1716") []
-    it "parses when content includes tab"
+    it "parses content including tab"
       $             p (genericLine 3) "3 CONT Header1\tHeader2\tHeader3\r\n"
       `shouldParse` Item "CONT" (Just "Header1\tHeader2\tHeader3") []
-    it "parses when tags includes underscore "
+    it "parses tags with underscore "
       $             p (genericLine 1) "1 _FIL LEGITIMATE_CHILD\r\n"
       `shouldParse` Item "_FIL" (Just "LEGITIMATE_CHILD") []
-    it "parses line with level, ref, and tag"
+    it "parses tags with digit "
+      $             p (genericLine 4) "4 ADR1 somewhere\r\n"
+      `shouldParse` Item "ADR1" (Just "somewhere") []
+    it "parses root line with level, reference, and tag"
       $             p gedcom "0 @I1@ INDI\r\n"
       `shouldParse` [Item "INDI" (Just "@I1@") []]
-    it "parses accepts ref with underscore"
+    it "parses root line, reference with underscore"
       $             p gedcom "0 @I_1@ INDI\r\n"
       `shouldParse` [Item "INDI" (Just "@I_1@") []]
+    it "parses root line, reference with lowercase"
+      $             p gedcom "0 @i@ INDI\r\n"
+      `shouldParse` [Item "INDI" (Just "@i@") []]
+    it "parses root line, reference with uppercase"
+      $             p gedcom "0 @I@ INDI\r\n"
+      `shouldParse` [Item "INDI" (Just "@I@") []]
+    it "parses root line, reference with digit"
+      $             p gedcom "0 @I12@ INDI\r\n"
+      `shouldParse` [Item "INDI" (Just "@I12@") []]
   describe "GedCom file" $ do
-    it "parses items tree"
+    it "parses file without UTF-8 BOM"
+      $             p gedcom "0 HEAD \r\n"
+      `shouldParse` [Item "HEAD" Nothing []]
+    it "parses file with UTF-8 BOM"
+      $             p gedcom (T.pack ('\65279' : "0 HEAD \r\n"))
+      `shouldParse` [Item "HEAD" Nothing []]
+    it "parses items in a tree"
       $             p
                       gedcom
                       (T.intercalate

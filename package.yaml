@@ -8,7 +8,6 @@ copyright:           "2020 Guillaume COLLIC"
 
 extra-source-files:
 - README.md
-- ChangeLog.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -47,7 +46,7 @@ executables:
 
 tests:
   familytree-test:
-    main:                Spec.hs
+    main:                Main.hs
     source-dirs:         test
     ghc-options:
     - -threaded

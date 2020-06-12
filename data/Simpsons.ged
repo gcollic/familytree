@@ -1,0 +1,44 @@
+0 HEAD
+1 SOUR https://github.com/jdfekete/geneaquilt/blob/master/src/data/Simpsons.ged
+2 VERS fe0c45d
+1 GEDC
+2 VERS 5.5
+0 @Abraham_Simpson@ INDI
+1 NAME Abraham /Simpson/
+0 @Bart_Simpson@ INDI
+1 NAME Bart /Simpson/
+0 @Clancy_Bouvier@ INDI
+1 NAME Clancy /Bouvier/
+0 @Homer_Simpson@ INDI
+1 NAME Homer /Simpson/
+0 @Jacqueline_Bouvier@ INDI
+1 NAME Jacqueline /Bouvier/
+0 @Lisa_Simpson@ INDI
+1 NAME Lisa /Simpson/
+0 @Maggie_Simpson@ INDI
+1 NAME Maggie /Simpson/
+0 @Marge_Simpson@ INDI
+1 NAME Marge /Simpson/
+0 @Mona_Simpson@ INDI
+1 NAME Mona /Simpson/
+0 @Patty_Bouvier@ INDI
+1 NAME Patty /Bouvier/
+0 @Selma_Bouvier@ INDI
+1 NAME Selma /Bouvier/
+0 @F0000@ FAM
+1 HUSB @Homer_Simpson@
+1 WIFE @Marge_Simpson@
+1 CHIL @Bart_Simpson@
+1 CHIL @Maggie_Simpson@
+1 CHIL @Lisa_Simpson@
+0 @F0002@ FAM
+1 HUSB @Abraham_Simpson@
+1 WIFE @Mona_Simpson@
+1 CHIL @Homer_Simpson@
+0 @F0003@ FAM
+1 HUSB @Clancy_Bouvier@
+1 WIFE @Jacqueline_Bouvier@
+1 CHIL @Patty_Bouvier@
+1 CHIL @Selma_Bouvier@
+1 CHIL @Marge_Simpson@
+0 TRLR
