@@ -19,24 +19,30 @@ p f = parse f "TEST"
 main :: IO ()
 main = hspec $ do
   describe "GedCom line" $ do
-    it "parses line with only indent and tag"
-      $             p (leveledLine 0) "0 HEAD \r\n"
+    it "parses line with only indent, tag, and space"
+      $             p (genericLine 0) "0 HEAD \r\n"
+      `shouldParse` Item "HEAD" Nothing []
+    it "parses line with only indent, tag, without ending space"
+      $             p (genericLine 0) "0 HEAD \r\n"
       `shouldParse` Item "HEAD" Nothing []
     it "parses line with level, tag, and single word"
-      $             p (leveledLine 2) "2 GIVN Jeanne\r\n"
+      $             p (genericLine 2) "2 GIVN Jeanne\r\n"
       `shouldParse` Item "GIVN" (Just "Jeanne") []
     it "parses line with level, tag, and multiple words"
-      $             p (leveledLine 2) "2 DATE 14 MAY 1716\r\n"
+      $             p (genericLine 2) "2 DATE 14 MAY 1716\r\n"
       `shouldParse` Item "DATE" (Just "14 MAY 1716") []
     it "parses when content includes tab"
-      $             p (leveledLine 3) "3 CONT Header1\tHeader2\tHeader3\r\n"
+      $             p (genericLine 3) "3 CONT Header1\tHeader2\tHeader3\r\n"
       `shouldParse` Item "CONT" (Just "Header1\tHeader2\tHeader3") []
     it "parses when tags includes underscore "
-      $             p (leveledLine 1) "1 _FIL LEGITIMATE_CHILD\r\n"
+      $             p (genericLine 1) "1 _FIL LEGITIMATE_CHILD\r\n"
       `shouldParse` Item "_FIL" (Just "LEGITIMATE_CHILD") []
     it "parses line with level, ref, and tag"
       $             p gedcom "0 @I1@ INDI\r\n"
       `shouldParse` [Item "INDI" (Just "@I1@") []]
+    it "parses accepts ref with underscore"
+      $             p gedcom "0 @I_1@ INDI\r\n"
+      `shouldParse` [Item "INDI" (Just "@I_1@") []]
   describe "GedCom file" $ do
     it "parses items tree"
       $             p

@@ -15,7 +15,7 @@
 module TolerantGedcomParser
     ( parseGedcom
     , gedcom
-    , leveledLine
+    , genericLine
     , Item(..)
     )
 where
@@ -48,7 +48,7 @@ gedcom = do
     return rootItems
 
 rootItem :: Parser Item
-rootItem = try referenceLine <|> (leveledLine 0)
+rootItem = try referenceLine <|> (genericLine 0)
 
 toMaybeText :: String -> Maybe Text
 toMaybeText [] = Nothing
@@ -57,19 +57,36 @@ toMaybeText x  = pure $ T.pack x
 referenceLine :: Parser Item
 referenceLine = do
     _    <- string "0 @"
-    ref  <- (many alphaNumChar)
+    ref  <- many (alphaNumChar <|> char '_')
     _    <- string "@ "
-    tag  <- (string "FAM" <|> string "INDI")
+    tag  <- parseTag
     _    <- eol
-    subs <- many $ leveledLine 1
+    subs <- many $ genericLine 1
     return $ Item tag (toMaybeText ("@" ++ ref ++ "@")) subs
 
-leveledLine :: Int -> Parser Item
-leveledLine i = do
+genericLine :: Int -> Parser Item
+genericLine i = try (shortLine i) <|> (longLine i)
+
+shortLine :: Int -> Parser Item
+shortLine i = do
+    _    <- char $ intToDigit i
+    _    <- char ' '
+    tag  <- parseTag
+    _    <- eol
+    subs <- many $ genericLine (i + 1)
+    return $ Item tag Nothing subs
+
+longLine :: Int -> Parser Item
+longLine i = do
     _       <- char $ intToDigit i
     _       <- char ' '
-    tag     <- many (upperChar <|> char '_')
+    tag     <- parseTag
     _       <- char ' '
     content <- manyTill (printChar <|> tab) eol
-    subs    <- many $ leveledLine (i + 1)
-    return $ Item (T.pack tag) (toMaybeText content) subs
+    subs    <- many $ genericLine (i + 1)
+    return $ Item tag (toMaybeText content) subs
+
+parseTag :: Parser Text
+parseTag = do
+    t     <- many (upperChar <|> char '_')
+    return $ T.pack t
