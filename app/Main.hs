@@ -37,7 +37,6 @@ parseArgs args
   usage =
     Tio.putStrLn
       $ T.intercalate "\n"
-      -- tag::usage[]
       $ [ "Usage: familytree <command> <options...> <gedcom file>"
         , ""
         , "  WORK IN PROGRESS"
@@ -71,7 +70,6 @@ parseArgs args
         , "    <indi> - reference of the INDI entry (root individual)"
         , "    <depth> - depth of ancestry to show"
         ]
-        -- end::usage[]
 
 loadGedcom :: (String, Action) -> IO (Action, [Entry])
 loadGedcom (filepath, a) = do

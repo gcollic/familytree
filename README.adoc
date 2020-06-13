@@ -1,6 +1,14 @@
-== Family tree
+= Family tree
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 
-[source,haskell]
-----
-include::app/Main.hs[tags=usage]
-----
+WARNING: Work in progress
+
+This app aims to transforms genealogy data from GEDCOM file into beautiful radial genealogy tree in SVG, ready for laser engraving after minor adjustments (such as transform text to path with Inkscape).
+
+It parses GEDCOM file without being too strict, in order to support most variants.
