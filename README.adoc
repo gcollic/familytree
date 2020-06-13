@@ -1,4 +1,4 @@
-= Family tree
+= 🌳 Family tree
 ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
@@ -9,6 +9,18 @@ endif::[]
 
 WARNING: Work in progress
 
+== What ?
+
 This app aims to transforms genealogy data from GEDCOM file into beautiful radial genealogy tree in SVG, ready for laser engraving after minor adjustments (such as transform text to path with Inkscape).
 
 It parses GEDCOM file without being too strict, in order to support most variants.
+
+== GEDCOM
+
+* Format reference (more strict than some implementations)
+** http://homepages.rootsweb.com/~pmcbride/gedcom/55gctoc.htm
+* Some sample files to play with
+** link:data/Simpsons.ged[./data/Simpsons.ged] (minimalist sample)
+** link:https://asoiaf.westeros.org/index.php?/topic/88863-all-the-family-trees/[A Song Of Ice And Fire (Game Of Thrones)]
+** link:https://patrickbrianmooney.nfshost.com/~patrick/greek-myth/greek-genealogy.html#download[Greek mythology]
+** link:https://github.com/RobSis/middle-earth-genealogy-project?files=1[Middle Earth]

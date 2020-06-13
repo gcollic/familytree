@@ -10,6 +10,7 @@
 -- Stability   :  experimental
 --
 -- Gedcom file parser, tolerant to variations.
+-- Strict reference : http://homepages.rootsweb.com/~pmcbride/gedcom/55gctoc.htm
 -----------------------------------------------------------------------------
 module TolerantGedcomParser
     ( parseGedcom
