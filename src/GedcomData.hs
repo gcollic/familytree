@@ -11,15 +11,23 @@
 -- Simple Gedcom data structure.
 -----------------------------------------------------------------------------
 module GedcomData
-  ( Entry(..)
+  ( Entries
+  , Entry(..)
+  , Tag(..)
   )
 where
 
 import           Data.Text                      ( Text )
 import           Data.Maybe                     ( Maybe )
+import           Data.Tree
 
-data Entry =
-  Entry {entryTag :: Text,
-        entryData :: Maybe Text,
-        entryChildren :: [Entry]}
+type Entries = Forest Entry
+
+data Entry = Entry {entryTag :: Tag,
+        entryData :: Maybe Text}
   deriving (Eq, Show)
+
+data Tag = OtherTag Text
+  deriving (Eq, Show)
+
+

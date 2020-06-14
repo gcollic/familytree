@@ -22,6 +22,7 @@ where
 import           Data.Char                      ( intToDigit )
 import           Data.Text                      ( Text )
 import qualified Data.Text                     as T
+import           Data.Tree
 import           Data.Void
 import           Text.Megaparsec         hiding ( State )
 import           Text.Megaparsec.Char
@@ -30,12 +31,12 @@ import           GedcomData
 
 type Parser = Parsec Void Text
 
-parseGedcom :: String -> Text -> [Entry]
+parseGedcom :: String -> Text -> Entries
 parseGedcom f s = case parse gedcom f s of
     Left  e -> trace (errorBundlePretty e) $ error "Problem parsing the file"
     Right x -> x
 
-gedcom :: Parser [Entry]
+gedcom :: Parser Entries
 gedcom = do
     _           <- optional bom
     rootEntries <- many rootEntry
@@ -43,10 +44,10 @@ gedcom = do
     return rootEntries
     where bom = char '\65279'
 
-rootEntry :: Parser Entry
+rootEntry :: Parser (Tree Entry)
 rootEntry = try referenceLine <|> (genericLine 0)
 
-referenceLine :: Parser Entry
+referenceLine :: Parser (Tree Entry)
 referenceLine = do
     _    <- char '0'
     _    <- char ' '
@@ -55,7 +56,7 @@ referenceLine = do
     t    <- tag
     _    <- eol
     subs <- many $ genericLine 1
-    return $ Entry t (Just ref) subs
+    return $ Node (Entry t (Just ref)) subs
 
 reference :: Parser Text
 reference = do
@@ -64,7 +65,7 @@ reference = do
     _   <- char '@'
     return $ T.pack $ "@" ++ ref ++ "@"
 
-genericLine :: Int -> Parser Entry
+genericLine :: Int -> Parser (Tree Entry)
 genericLine i = do
     _    <- char $ intToDigit i
     _    <- char ' '
@@ -72,15 +73,15 @@ genericLine i = do
     val  <- optional content
     _    <- eol
     subs <- many $ genericLine (i + 1)
-    return $ Entry t (nothingIfEmpty $ T.strip . T.pack <$> val) subs
+    return $ Node (Entry t (nothingIfEmpty $ T.strip . T.pack <$> val)) subs
   where
     nothingIfEmpty (Just "") = Nothing
     nothingIfEmpty x         = x
 
 content :: Parser String
 content = do
-    _     <- char ' '
+    _ <- char ' '
     many (printChar <|> tab)
 
-tag :: Parser Text
-tag = T.pack <$> many (upperChar <|> char '_' <|> digitChar)
+tag :: Parser Tag
+tag = OtherTag <$> T.pack <$> many (upperChar <|> char '_' <|> digitChar)

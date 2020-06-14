@@ -19,15 +19,19 @@ where
 import           Data.Text                      ( Text )
 import           Data.Text.Internal.Search      ( indices )
 import qualified Data.Text                     as T
+import           Data.Tree
 import           GedcomData
 
-findIndividual :: Text -> [Entry] -> [Entry]
-findIndividual t =
-    filter (\e -> entryTag e == "INDI" && any (isThatName t) (entryChildren e))
+findIndividual :: Text -> Entries -> Entries
+findIndividual t = filter (\n -> isIndiNode n && containsName n)
+  where
+    isIndiNode n = (entryTag . rootLabel) n == OtherTag "INDI"
+    containsName n = any (isThatName t) (subForest n)
 
-isThatName :: Text -> Entry -> Bool
-isThatName text (Entry "NAME" (Just name) _) = text `isInside` name
-isThatName _    _                            = False
+isThatName :: Text -> (Tree Entry) -> Bool
+isThatName text (Node (Entry (OtherTag "NAME") (Just name)) _) =
+    text `isInside` name
+isThatName _ _ = False
 
 isInside :: Text -> Text -> Bool
 isInside a b = not $ null $ indices (T.toLower a) (T.toLower b)

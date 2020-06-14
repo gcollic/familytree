@@ -11,7 +11,8 @@ import           GedcomLibrarian
 import           Data.Text                      ( Text )
 import qualified Data.Text                     as T
 import qualified Data.Text.IO                  as Tio
-import           Data.Maybe
+import           Data.Tree
+import           Data.Maybe                     ( fromMaybe )
 import           System.Exit
 import           System.Environment
 
@@ -71,12 +72,12 @@ parseArgs args
         , "    <depth> - depth of ancestry to show"
         ]
 
-loadGedcom :: (String, Action) -> IO (Action, [Entry])
+loadGedcom :: (String, Action) -> IO (Action, Entries)
 loadGedcom (filepath, a) = do
   content <- Tio.readFile (filepath :: FilePath)
   return (a, parseGedcom filepath content)
 
-act :: (Action, [Entry]) -> IO ()
+act :: (Action, Entries) -> IO ()
 act (Show               , entries) = showEntries entries
 act (FindIndividual name, entries) = showEntries $ findIndividual name entries
 act (FindFamily indi depth, _) =
@@ -84,13 +85,14 @@ act (FindFamily indi depth, _) =
 act (GenerateSvg fam depth, _) =
   Tio.putStrLn ("TODO GenerateSvg:" <> fam <> " / " <> (T.pack $ show depth))
 
-showEntries :: [Entry] -> IO ()
+showEntries :: Entries -> IO ()
 showEntries = Tio.putStrLn . (T.intercalate "\n") . gedcom2ascii
 
-gedcom2ascii :: [Entry] -> [Text]
-gedcom2ascii []                 = []
-gedcom2ascii (Entry t c o : xs) = currentLine : (subItems ++ nextItems)
+gedcom2ascii :: Entries -> [Text]
+gedcom2ascii [] = []
+gedcom2ascii (Node (Entry t c) subs : next) = currentLine : (subItems ++ nextItems)
  where
-  currentLine = T.intercalate "\t" [t, fromMaybe "" c]
-  subItems    = map ("  " <>) $ gedcom2ascii o
-  nextItems   = gedcom2ascii xs
+  currentLine = (formatTag t) <> " " <> (fromMaybe "" c)
+  formatTag (OtherTag o) = o
+  subItems    = map ("  " <>) $ gedcom2ascii subs
+  nextItems   = gedcom2ascii next

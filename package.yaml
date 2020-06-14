@@ -43,6 +43,7 @@ executables:
     - familytree
     - text
     - megaparsec
+    - containers
 
 tests:
   familytree-test:
@@ -58,3 +59,4 @@ tests:
     - QuickCheck
     - hspec-megaparsec
     - megaparsec
+    - containers
