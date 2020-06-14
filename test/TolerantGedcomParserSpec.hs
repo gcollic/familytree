@@ -29,7 +29,7 @@ spec = do
       `shouldParse` Node (Entry (OtherTag "HEAD") Nothing) []
     it "parses line with level, tag, and single word"
       $             p (genericLine 2) "2 GIVN Jeanne\r\n"
-      `shouldParse` Node (Entry (OtherTag "GIVN") (Just "Jeanne")) []
+      `shouldParse` Node (Entry GIVN (Just "Jeanne")) []
     it "parses line with level, tag, and multiple words"
       $             p (genericLine 2) "2 DATE 14 MAY 1716\r\n"
       `shouldParse` Node (Entry (OtherTag "DATE") (Just "14 MAY 1716")) []
@@ -48,19 +48,19 @@ spec = do
       `shouldParse` Node (Entry (OtherTag "ADR1") (Just "somewhere")) []
     it "parses root line with level, reference, and tag"
       $             p gedcom "0 @I1@ INDI\r\n"
-      `shouldParse` [Node (Entry (OtherTag "INDI") (Just "@I1@")) []]
+      `shouldParse` [Node (Entry INDI (Just "@I1@")) []]
     it "parses root line, reference with underscore"
       $             p gedcom "0 @I_1@ INDI\r\n"
-      `shouldParse` [Node (Entry (OtherTag "INDI") (Just "@I_1@")) []]
+      `shouldParse` [Node (Entry INDI (Just "@I_1@")) []]
     it "parses root line, reference with lowercase"
       $             p gedcom "0 @i@ INDI\r\n"
-      `shouldParse` [Node (Entry (OtherTag "INDI") (Just "@i@")) []]
+      `shouldParse` [Node (Entry INDI (Just "@i@")) []]
     it "parses root line, reference with uppercase"
       $             p gedcom "0 @I@ INDI\r\n"
-      `shouldParse` [Node (Entry (OtherTag "INDI") (Just "@I@")) []]
+      `shouldParse` [Node (Entry INDI (Just "@I@")) []]
     it "parses root line, reference with digit"
       $             p gedcom "0 @I12@ INDI\r\n"
-      `shouldParse` [Node (Entry (OtherTag "INDI") (Just "@I12@")) []]
+      `shouldParse` [Node (Entry INDI (Just "@I12@")) []]
   describe "GedCom file" $ do
     it "parses file without UTF-8 BOM"
       $             p gedcom "0 HEAD \r\n"
@@ -88,7 +88,7 @@ spec = do
                         [ Node
                           (Entry (OtherTag "SOUR") (Just "Heredis PC2017"))
                           [ Node (Entry (OtherTag "VERS") (Just "2017")) []
-                          , Node (Entry (OtherTag "NAME") (Just "Heredis PC"))
+                          , Node (Entry NAME (Just "Heredis PC"))
                                  []
                           , Node
                             (Entry (OtherTag "CORP") (Just "BSD Concept"))

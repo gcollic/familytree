@@ -20,49 +20,49 @@ spec = describe "Find indi" $ do
   it "returns matching INDI entries (the text is the name)" $ do
     findIndividual "Maggie /Simpson/" simpsons
       `shouldBe` [ Node
-                     (Entry (OtherTag "INDI") (Just "@Maggie_Simpson@"))
+                     (Entry INDI (Just "@Maggie_Simpson@"))
                      [ Node
-                         (Entry (OtherTag "NAME") (Just "Maggie /Simpson/"))
+                         (Entry NAME (Just "Maggie /Simpson/"))
                          []
                      ]
                  ]
   it "returns matching INDI entries (the text is a part of the name)" $ do
     findIndividual "Simpson" simpsons
       `shouldBe` [ Node
-                   (Entry (OtherTag "INDI") (Just "@Abraham_Simpson@"))
-                   [ Node (Entry (OtherTag "NAME") (Just "Abraham /Simpson/"))
+                   (Entry INDI (Just "@Abraham_Simpson@"))
+                   [ Node (Entry NAME (Just "Abraham /Simpson/"))
                           []
                    ]
                  , Node
-                   (Entry (OtherTag "INDI") (Just "@Bart_Simpson@"))
-                   [Node (Entry (OtherTag "NAME") (Just "Bart /Simpson/")) []]
+                   (Entry INDI (Just "@Bart_Simpson@"))
+                   [Node (Entry NAME (Just "Bart /Simpson/")) []]
                  , Node
-                   (Entry (OtherTag "INDI") (Just "@Homer_Simpson@"))
-                   [Node (Entry (OtherTag "NAME") (Just "Homer /Simpson/")) []]
+                   (Entry INDI (Just "@Homer_Simpson@"))
+                   [Node (Entry NAME (Just "Homer /Simpson/")) []]
                  , Node
-                   (Entry (OtherTag "INDI") (Just "@Lisa_Simpson@"))
-                   [Node (Entry (OtherTag "NAME") (Just "Lisa /Simpson/")) []]
+                   (Entry INDI (Just "@Lisa_Simpson@"))
+                   [Node (Entry NAME (Just "Lisa /Simpson/")) []]
                  , Node
-                   (Entry (OtherTag "INDI") (Just "@Maggie_Simpson@"))
-                   [Node (Entry (OtherTag "NAME") (Just "Maggie /Simpson/")) []]
+                   (Entry INDI (Just "@Maggie_Simpson@"))
+                   [Node (Entry NAME (Just "Maggie /Simpson/")) []]
                  , Node
-                   (Entry (OtherTag "INDI") (Just "@Marge_Simpson@"))
-                   [Node (Entry (OtherTag "NAME") (Just "Marge /Simpson/")) []]
+                   (Entry INDI (Just "@Marge_Simpson@"))
+                   [Node (Entry NAME (Just "Marge /Simpson/")) []]
                  , Node
-                   (Entry (OtherTag "INDI") (Just "@Mona_Simpson@"))
-                   [Node (Entry (OtherTag "NAME") (Just "Mona /Simpson/")) []]
+                   (Entry INDI (Just "@Mona_Simpson@"))
+                   [Node (Entry NAME (Just "Mona /Simpson/")) []]
                  ]
   it "ignores case" $ do
     findIndividual "Ma" simpsons
       `shouldBe` [ Node
-                   (Entry (OtherTag "INDI") (Just "@Maggie_Simpson@"))
-                   [Node (Entry (OtherTag "NAME") (Just "Maggie /Simpson/")) []]
+                   (Entry INDI (Just "@Maggie_Simpson@"))
+                   [Node (Entry NAME (Just "Maggie /Simpson/")) []]
                  , Node
-                   (Entry (OtherTag "INDI") (Just "@Marge_Simpson@"))
-                   [Node (Entry (OtherTag "NAME") (Just "Marge /Simpson/")) []]
+                   (Entry INDI (Just "@Marge_Simpson@"))
+                   [Node (Entry NAME (Just "Marge /Simpson/")) []]
                  , Node
-                   (Entry (OtherTag "INDI") (Just "@Selma_Bouvier@"))
-                   [Node (Entry (OtherTag "NAME") (Just "Selma /Bouvier/")) []]
+                   (Entry INDI (Just "@Selma_Bouvier@"))
+                   [Node (Entry NAME (Just "Selma /Bouvier/")) []]
                  ]
 
 simpsons :: Entries

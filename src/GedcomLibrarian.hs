@@ -25,11 +25,11 @@ import           GedcomData
 findIndividual :: Text -> Entries -> Entries
 findIndividual t = filter (\n -> isIndiNode n && containsName n)
   where
-    isIndiNode n = (entryTag . rootLabel) n == OtherTag "INDI"
+    isIndiNode n = (entryTag . rootLabel) n == INDI
     containsName n = any (isThatName t) (subForest n)
 
 isThatName :: Text -> (Tree Entry) -> Bool
-isThatName text (Node (Entry (OtherTag "NAME") (Just name)) _) =
+isThatName text (Node (Entry NAME (Just name)) _) =
     text `isInside` name
 isThatName _ _ = False
 

@@ -84,4 +84,4 @@ content = do
     many (printChar <|> tab)
 
 tag :: Parser Tag
-tag = OtherTag <$> T.pack <$> many (upperChar <|> char '_' <|> digitChar)
+tag = tagFromText <$> T.pack <$> many (upperChar <|> char '_' <|> digitChar)

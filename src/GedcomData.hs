@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
 -----------------------------------------------------------------------------
@@ -14,6 +15,7 @@ module GedcomData
   ( Entries
   , Entry(..)
   , Tag(..)
+  , tagFromText
   )
 where
 
@@ -27,7 +29,18 @@ data Entry = Entry {entryTag :: Tag,
         entryData :: Maybe Text}
   deriving (Eq, Show)
 
-data Tag = OtherTag Text
+data Tag = INDI | NAME | GIVN | SURN | FAMC | FAMS | FAM | HUSB | WIFE | CHIL | OtherTag Text
   deriving (Eq, Show)
 
-
+tagFromText :: Text -> Tag
+tagFromText "INDI" = INDI
+tagFromText "NAME" = NAME
+tagFromText "GIVN" = GIVN
+tagFromText "SURN" = SURN
+tagFromText "FAMC" = FAMC
+tagFromText "FAMS" = FAMS
+tagFromText "FAM"  = FAM
+tagFromText "HUSB" = HUSB
+tagFromText "WIFE" = WIFE
+tagFromText "CHIL" = CHIL
+tagFromText t      = OtherTag t

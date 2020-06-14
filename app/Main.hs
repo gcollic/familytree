@@ -15,6 +15,7 @@ import           Data.Tree
 import           Data.Maybe                     ( fromMaybe )
 import           System.Exit
 import           System.Environment
+import           Rainbow
 
 data Action =
   Show | FindIndividual Text | FindFamily Text Int | GenerateSvg Text Int
@@ -86,13 +87,38 @@ act (GenerateSvg fam depth, _) =
   Tio.putStrLn ("TODO GenerateSvg:" <> fam <> " / " <> (T.pack $ show depth))
 
 showEntries :: Entries -> IO ()
-showEntries = Tio.putStrLn . (T.intercalate "\n") . gedcom2ascii
+showEntries = (mapM_ putChunk) . gedcom2ascii
 
-gedcom2ascii :: Entries -> [Text]
+gedcom2ascii :: Entries -> [Chunk Text]
 gedcom2ascii [] = []
-gedcom2ascii (Node (Entry t c) subs : next) = currentLine : (subItems ++ nextItems)
+gedcom2ascii (Node (Entry t c) subs : next) =
+  formatLine (tagText t) (tagColor t) (contentColor t)
+    ++ [chunk "\n"]
+    ++ subItems
+    ++ nextItems
  where
-  currentLine = (formatTag t) <> " " <> (fromMaybe "" c)
-  formatTag (OtherTag o) = o
-  subItems    = map ("  " <>) $ gedcom2ascii subs
-  nextItems   = gedcom2ascii next
+  formatLine x c1 c2 =
+    [chunk x & fore c1, chunk " ", (chunk $ fromMaybe "" c) & fore c2]
+  subItems  = map (chunk "  " <>) $ gedcom2ascii subs
+  nextItems = gedcom2ascii next
+  tagColor (OtherTag x) = color256 240
+  tagColor INDI         = color256 63
+  tagColor NAME         = color256 69
+  tagColor GIVN         = color256 75
+  tagColor SURN         = color256 75
+  tagColor FAMS         = color256 69
+  tagColor FAMC         = color256 69
+  tagColor FAM          = color256 202
+  tagColor HUSB         = color256 208
+  tagColor WIFE         = color256 208
+  tagColor CHIL         = color256 208
+  tagColor x            = red
+  contentColor (OtherTag x) = color256 240
+  contentColor FAMS         = color256 202
+  contentColor FAMC         = color256 202
+  contentColor HUSB         = color256 63
+  contentColor WIFE         = color256 63
+  contentColor CHIL         = color256 63
+  contentColor x            = white
+  tagText (OtherTag x) = x
+  tagText x            = (T.pack $ show x)
